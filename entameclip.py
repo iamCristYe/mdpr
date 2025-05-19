@@ -3,6 +3,7 @@ import requests
 import os
 from urllib.parse import urlparse
 import time
+import re
 
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -34,7 +35,7 @@ def parse_html():
         # print(img)
         img_src = img["src"]
         if "image/gif" not in img_src:
-            picture_url_list.append(remove_all_params(img_src).replace("-300x200", ""))
+            picture_url_list.append(re.sub(r"-\d+x\d+", "", img_src))
 
     print(picture_url_list)
     print(len(picture_url_list))
