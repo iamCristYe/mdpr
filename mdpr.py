@@ -7,10 +7,12 @@ import time
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
+
 def remove_all_params(url):
     parsed = urlparse(url)
     clean_url = parsed._replace(query="").geturl()
     return clean_url
+
 
 # 解析HTML
 def parse_html():
@@ -22,26 +24,35 @@ def parse_html():
     ).text
     with open("photos.html", "w", encoding="utf-8") as f:
         f.write(photos_html)
-    # print(members_html)
-    # class has to be exactly the same!
 
-    soup = BeautifulSoup(photos_html, "lxml").find_all(
-        "ol", class_="pg-photo__webImageList"
-    )[0]
-    # print(soup)
-    pics = []
-    for img in soup.find_all("img"):
+    picture_url_list = []
+    for img in (
+        BeautifulSoup(photos_html, "lxml")
+        .find_all("div", class_="pg-photo__body")[0]
+        .find_all("img")
+    ):
         # print(img)
         img_src = img["src"]
         if "protect" not in img_src:
-            pics.append(remove_all_params(img_src)+"?width=38400&auto=png&quality=100")
-            # replace all param of original image
+            picture_url_list.append(
+                remove_all_params(img_src) + "?width=3840&quality=100"
+            )
 
-            #?width=1920&auto=png&quality=100
-    print(pics)
-    return pics
+    for img in (
+        BeautifulSoup(photos_html, "lxml")
+        .find_all("ol", class_="pg-photo__webImageList")[0]
+        .find_all("img")
+    ):
+        # print(img)
+        img_src = img["src"]
+        if "protect" not in img_src:
+            picture_url_list.append(
+                remove_all_params(img_src) + "?width=3840&quality=100"
+            )
 
-
+    print(picture_url_list)
+    print(len(picture_url_list))
+    return picture_url_list
 
 
 def send_telegram_photo(caption, img_url):
@@ -77,10 +88,13 @@ def send_telegram_file_link(caption, file_link):
                 "parse_mode": "HTML",
             }
 
-            file_link = [file_link]
             response = requests.post(url, data=payload)
             response_body = response.json()
             if "error_code" not in response_body:
+                time.sleep(5)
+                return
+            else:
+                print(response_body)
                 time.sleep(5)
                 return
         except Exception as e:
@@ -89,14 +103,13 @@ def send_telegram_file_link(caption, file_link):
             pass
 
 
-
-pics = parse_html()
+picture_url_list = parse_html()
 import datetime
 
-for i in range(len(pics)):
-    pics = pics[i]
+for i in range(len(picture_url_list)):
+    picture_url = picture_url_list[i]
 
     send_telegram_file_link(
-        f"{i+1}/{len(pics)}",
-        pics[i],
+        f"{i+1}/{len(picture_url_list)}",
+        picture_url,
     )
