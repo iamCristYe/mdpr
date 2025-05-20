@@ -1,8 +1,8 @@
 name: lemino
 
 on:
-  # schedule:
-  #   - cron: '*/15 * * * *'
+  schedule:
+    - cron: '4 */6 * * *'
   workflow_dispatch:
 
 jobs:
