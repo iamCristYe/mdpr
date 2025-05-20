@@ -82,7 +82,7 @@ def send_telegram_document_link_save_first(caption, file_link):
                 try:
                     response = requests.post(url, data=data, files=files)
                     response_body = response.json()
-                    print(response_body)  # 可选：调试用
+                    # print(response_body)  # 可选：调试用
                     if "error_code" not in response_body:
                         break
                     else:
@@ -124,7 +124,7 @@ def send_telegram_photo_link_save_first(caption, file_link):
                 try:
                     response = requests.post(url, data=data, files=files)
                     response_body = response.json()
-                    print(response_body)  # 可选：调试用
+                    # print(response_body)  # 可选：调试用
                     if "error_code" not in response_body:
                         break
                     else:
@@ -142,9 +142,9 @@ def send_telegram_photo_link_save_first(caption, file_link):
             os.remove(local_filename)
 
 
-def get_send(id):
+def get_send(id, start):
     consecutive_not_found = 0
-    for i in range(9999):
+    for i in range(start, 9999):
         url = f"https://lemino.docomo.ne.jp/ft/{id}/images/cntents_{i}.webp"
         response = requests.head(url)
         if response.status_code == 200:
@@ -155,12 +155,12 @@ def get_send(id):
             print(f"No images found for {url}")
             consecutive_not_found += 1
         # time.sleep(5)
-        if consecutive_not_found >= 2:
+        if consecutive_not_found >= 15:
             print("No more images found, stopping.")
             print("Finished sending images.")
             break
 
 
-get_send("0000013")
-get_send("0000045")
-get_send("0000046")
+get_send("0000013", 1)
+get_send("0000045", 1)
+get_send("0000046", 1)
