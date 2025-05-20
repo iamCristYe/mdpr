@@ -155,12 +155,12 @@ def get_send(id, start):
             print(f"No images found for {url}")
             consecutive_not_found += 1
         # time.sleep(5)
-        if consecutive_not_found >= 15:
+        if consecutive_not_found >= 2:
             print("No more images found, stopping.")
             print("Finished sending images.")
             break
 
 
-get_send("0000013", 1)
-get_send("0000045", 1)
-get_send("0000046", 1)
+get_send("0000013", 39)
+get_send("0000045", 30)
+get_send("0000046", 23)
