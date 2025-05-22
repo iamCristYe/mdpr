@@ -10,7 +10,7 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
 def remove_all_params(url):
     parsed = urlparse(url)
-    clean_url = parsed._replace(query="").geturl()
+    clean_url = parsed._replace(query="quality=100").geturl()
     return clean_url
 
 
