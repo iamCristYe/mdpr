@@ -34,9 +34,9 @@ def parse_html():
         # print(img)
         img_src = img["src"]
         if "protect" not in img_src:
-            picture_url_list.append(
-                remove_all_params(img_src) + "?width=3840&quality=100"
-            )
+            print(img_src)
+            print(remove_all_params(img_src))
+            picture_url_list.append(remove_all_params(img_src))
 
     for img in (
         BeautifulSoup(photos_html, "lxml")
@@ -46,6 +46,8 @@ def parse_html():
         # print(img)
         img_src = img["src"]
         if "protect" not in img_src:
+            print(img_src)
+            print(remove_all_params(img_src))
             picture_url_list.append(remove_all_params(img_src))
 
     print(picture_url_list)
