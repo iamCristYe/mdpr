@@ -28,14 +28,12 @@ def parse_html():
 
     picture_url_list = []
     for img in (
-        BeautifulSoup(photos_html, "lxml")
-        .find_all("div", class_="textwidget")[3]
-        .find_all("img")
+        BeautifulSoup(photos_html, "lxml").find_all("figure")
+         
     ):
-        # print(img)
-        img_src = img["src"]
-        if "image/gif" not in img_src:
-            picture_url_list.append(re.sub(r"-\d+x\d+", "", img_src))
+        print(img)
+        img_src = img.find_all("img")[0]["srcset"]
+        picture_url_list.append(img_src.split(",")[-1].split(" "[0]))
 
     print(picture_url_list)
     print(len(picture_url_list))
