@@ -33,7 +33,7 @@ def parse_html():
     ):
         print(img)
         img_src = img.find_all("img")[0]["srcset"]
-        picture_url_list.append(img_src.split(",")[-1].split(" "[0]))
+        picture_url_list.append(img_src.split(",")[-1].split(" ")[1].split("-")[0]+".webp")
 
     print(picture_url_list)
     print(len(picture_url_list))
