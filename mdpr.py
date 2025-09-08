@@ -20,7 +20,7 @@ def parse_html():
         "User-Agent": "curl/8.5.0",
     }
     photos_html = requests.get(
-        "https://mdpr.jp/photo/detail/18770278", headers=headers
+        "https://mdpr.jp/photo/detail/18977428", headers=headers
     ).text
     with open("photos.html", "w", encoding="utf-8") as f:
         f.write(photos_html)
