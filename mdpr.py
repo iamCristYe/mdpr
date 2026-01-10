@@ -4,7 +4,7 @@ import os
 from urllib.parse import urlparse
 import time
 
-TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+TELEGRAM_CHAT_ID = "-1001495758961"
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
 
@@ -20,7 +20,7 @@ def parse_html():
         "User-Agent": "curl/8.5.0",
     }
     photos_html = requests.get(
-        "https://mdpr.jp/photo/detail/19360766", headers=headers
+        "https://mdpr.jp/photo/detail/19552648", headers=headers
     ).text
     with open("photos.html", "w", encoding="utf-8") as f:
         f.write(photos_html)
