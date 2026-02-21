@@ -21,7 +21,7 @@ def parse_html():
         "User-Agent": "curl/8.5.0",
     }
     photos_html = requests.get(
-        "https://entameclip.com/picture/453042/", headers=headers
+        "https://entameclip.com/picture/471355/", headers=headers
     ).text
     with open("photos.html", "w", encoding="utf-8") as f:
         f.write(photos_html)
