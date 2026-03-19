@@ -115,7 +115,7 @@ def send_telegram_message(caption):
 
             payload = {
                 "chat_id": TELEGRAM_CHAT_ID,
-                "message": caption,
+                "text": caption,
                 "parse_mode": "HTML",
             }
             if TELEGRAM_THREAD_ID is not None:
