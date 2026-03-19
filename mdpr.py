@@ -80,11 +80,14 @@ def send_telegram_photo(caption, img_url):
             pass
 
 
+
 def send_telegram_file_link(caption, file_link):
-    while True:
+    max_retries = 5
+    attempt = 0
+
+    while attempt < max_retries:
         try:
             url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendDocument"
-
             payload = {
                 "chat_id": TELEGRAM_CHAT_ID,
                 "caption": caption,
@@ -93,20 +96,19 @@ def send_telegram_file_link(caption, file_link):
             }
             if TELEGRAM_THREAD_ID is not None:
                 payload["message_thread_id"] = TELEGRAM_THREAD_ID
-
-            response = requests.post(url, data=payload)
-            response_body = response.json()
-            if "error_code" not in response_body:
-                time.sleep(5)
-                return
+            response = requests.post(url, data=payload, timeout=60)
+            body = response.json()
+            if "error_code" not in body:
+                return True
             else:
-                print(response_body)
-                time.sleep(5)
-                return
+                # Print for diagnostics; still return False to trigger fallback if desired
+                print("sendDocument link error:", body)
+                return False
         except Exception as e:
             print(e)
-            time.sleep(5)
-            pass
+            # Try again (you can add a counter if you want to limit retries)
+            time.sleep(20)
+            attempt += 1
 
 
 def send_telegram_message(caption):
