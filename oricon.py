@@ -18,7 +18,10 @@ ORICON_START_INDEX = int(os.environ.get("ORICON_START_INDEX", "1"))
 
 
 def send_telegram_file_link(caption, file_link):
-    while True:
+    max_retries = 5
+    attempt = 0
+
+    while attempt < max_retries:
         try:
             url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendDocument"
             payload = {
@@ -40,8 +43,8 @@ def send_telegram_file_link(caption, file_link):
         except Exception as e:
             print(e)
             # Try again (you can add a counter if you want to limit retries)
-            time.sleep(1)
-            pass
+            time.sleep(20)
+            attempt += 1
 
 
 def send_telegram_message(text):
