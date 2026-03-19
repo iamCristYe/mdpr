@@ -4,8 +4,10 @@ import os
 from urllib.parse import urlparse
 import time
 
-TELEGRAM_CHAT_ID = "-1001495758961"
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+TELEGRAM_THREAD_ID = os.environ.get("TELEGRAM_THREAD_ID")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+FIRST_PHOTO_ID = os.environ.get("FIRST_PHOTO_ID")
 
 
 def remove_all_params(url):
@@ -20,7 +22,7 @@ def parse_html():
         "User-Agent": "curl/8.5.0",
     }
     photos_html = requests.get(
-        "https://mdpr.jp/photo/detail/19832821", headers=headers
+        "https://mdpr.jp/photo/detail/" + FIRST_PHOTO_ID, headers=headers #19832821
     ).text
     with open("photos.html", "w", encoding="utf-8") as f:
         f.write(photos_html)
@@ -64,6 +66,8 @@ def send_telegram_photo(caption, img_url):
                 "photo": img_url,
                 "caption": caption,
             }
+            if TELEGRAM_THREAD_ID is not None:
+                payload["message_thread_id"] = TELEGRAM_THREAD_ID
 
             response = requests.post(url, json=payload)
             response_body = response.json()
@@ -87,6 +91,35 @@ def send_telegram_file_link(caption, file_link):
                 "document": file_link,
                 "parse_mode": "HTML",
             }
+            if TELEGRAM_THREAD_ID is not None:
+                payload["message_thread_id"] = TELEGRAM_THREAD_ID
+
+            response = requests.post(url, data=payload)
+            response_body = response.json()
+            if "error_code" not in response_body:
+                time.sleep(5)
+                return
+            else:
+                print(response_body)
+                time.sleep(5)
+                return
+        except Exception as e:
+            print(e)
+            time.sleep(5)
+            pass
+
+def send_telegram_message(caption):
+    while True:
+        try:
+            url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+
+            payload = {
+                "chat_id": TELEGRAM_CHAT_ID,
+                "message": caption,
+                "parse_mode": "HTML",
+            }
+            if TELEGRAM_THREAD_ID is not None:
+                payload["message_thread_id"] = TELEGRAM_THREAD_ID
 
             response = requests.post(url, data=payload)
             response_body = response.json()
@@ -113,3 +146,4 @@ for i in range(len(picture_url_list)):
         f"{i+1}/{len(picture_url_list)}",
         picture_url,
     )
+    send_telegram_message("https://mdpr.jp/photo/detail/" + FIRST_PHOTO_ID)

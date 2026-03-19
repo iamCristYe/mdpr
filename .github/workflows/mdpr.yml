@@ -4,6 +4,12 @@ on:
   # schedule:
   #   - cron: '*/15 * * * *'
   workflow_dispatch:
+    inputs:
+      FIRST_PHOTO_ID:
+        description: 'FIRST_PHOTO_ID'
+        required: true
+        type: string
+
 
 jobs:
   mdpr:
@@ -29,5 +35,7 @@ jobs:
         run: |
           python mdpr.py
         env:
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_CHAT_ID: '-1002646331785'
+          TELEGRAM_THREAD_ID: '4812'
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          FIRST_PHOTO_ID: ${{ inputs.FIRST_PHOTO_ID }} 
