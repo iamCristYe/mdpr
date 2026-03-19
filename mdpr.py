@@ -22,7 +22,7 @@ def parse_html():
         "User-Agent": "curl/8.5.0",
     }
     photos_html = requests.get(
-        "https://mdpr.jp/photo/detail/" + FIRST_PHOTO_ID, headers=headers #19832821
+        "https://mdpr.jp/photo/detail/" + FIRST_PHOTO_ID, headers=headers  # 19832821
     ).text
     with open("photos.html", "w", encoding="utf-8") as f:
         f.write(photos_html)
@@ -107,6 +107,7 @@ def send_telegram_file_link(caption, file_link):
             print(e)
             time.sleep(5)
             pass
+
 
 def send_telegram_message(caption):
     while True:
