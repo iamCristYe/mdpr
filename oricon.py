@@ -39,7 +39,7 @@ def send_telegram_file_link(caption, file_link):
             else:
                 # Print for diagnostics; still return False to trigger fallback if desired
                 print("sendDocument link error:", body)
-                return False
+
         except Exception as e:
             print(e)
             # Try again (you can add a counter if you want to limit retries)
@@ -105,7 +105,7 @@ def send_telegram_file_upload(caption, img_url):
                 return False
         except Exception as e:
             print(e)
-            time.sleep(1)
+            time.sleep(20)
             pass
 
 
