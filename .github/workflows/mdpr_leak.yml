@@ -1,0 +1,40 @@
+name: mdpr_leak
+
+on:
+  # schedule:
+  #   - cron: '*/15 * * * *'
+  workflow_dispatch:
+    inputs:
+      FIRST_PHOTO_ID:
+        description: 'FIRST_PHOTO_ID'
+        required: true
+        type: string
+
+
+jobs:
+  mdpr_leak:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8' # Specify the Python version you need
+    
+      - name: Run apt and pip
+        run: |
+          sudo apt update
+          pip install requests
+          pip install bs4
+          pip install lxml
+
+      - name: Run Python script
+        run: |
+          python mdpr.py
+        env:
+          TELEGRAM_CHAT_ID: '-1002350782955'
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          FIRST_PHOTO_ID: ${{ inputs.FIRST_PHOTO_ID }} 
